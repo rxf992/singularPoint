@@ -8,6 +8,7 @@ using Alchemy;
 using Alchemy.Classes;
 using System.Diagnostics;
 using System.Net;
+using System.Runtime.InteropServices; 
 
 namespace stepperMatrix
 {
@@ -83,17 +84,25 @@ namespace stepperMatrix
             log.Debug("!!! needPowerOff=" + needPowerOff);
             if(needPowerOff)
             {
-                Process myProcess = new Process();
-                myProcess.StartInfo.FileName = "cmd.exe";
-                myProcess.StartInfo.UseShellExecute = false;
-                myProcess.StartInfo.RedirectStandardInput = true;
-                myProcess.StartInfo.RedirectStandardOutput = true;
-                myProcess.StartInfo.RedirectStandardError = true;
-                myProcess.StartInfo.CreateNoWindow = true;
-                myProcess.Start();
-                //myProcess.StandardInput.WriteLine("shutdown -s -f -t 5");
-                myProcess.StandardInput.WriteLine("shutdown -p -f");
-                myProcess.Close();
+                log.Debug("do shut down");
+                //Process myProcess = new Process();
+                //myProcess.StartInfo.FileName = "cmd.exe";
+                //myProcess.StartInfo.UseShellExecute = false;
+                //myProcess.StartInfo.RedirectStandardInput = true;
+                //myProcess.StartInfo.RedirectStandardOutput = true;
+                //myProcess.StartInfo.RedirectStandardError = true;
+                //myProcess.StartInfo.CreateNoWindow = true;
+                //myProcess.Start();
+                ////myProcess.StandardInput.WriteLine("shutdown -s -f -t 5");
+                //myProcess.StandardInput.WriteLine("shutdown -p -f");
+                //myProcess.Close();
+                Process.Start("shutdown", "/p");    // starts the shutdown application 
+                // the argument /s is to shut down the computer
+                // the argument /t 0 is to tell the process that 
+                // the specified operation needs to be completed 
+                // after 0 seconds
+                Thread.Sleep(3000);
+                
             }
 
         }
