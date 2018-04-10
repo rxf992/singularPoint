@@ -1,0 +1,19 @@
+{
+	"row":1,
+	"col":1,
+	"lastTime":0,
+	"actionType":"setSpeed",
+	"value":10000
+}
+
+"setSpeed"
+"brake"
+"shutdown"
+"random"
+"startPlayDefaultList"
+"stopPlayDefaultList"
+"wait"
+"waitSpeed"
+"disable"
+"enable"
+"sync"
