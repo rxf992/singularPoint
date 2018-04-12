@@ -34,20 +34,23 @@ namespace parachute
         Hashtable matrix = new Hashtable();               
         
         // 初始化 matrix
-
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public static MotorMatrix createMotorMatrixWithConfigFile(String configFullFileName)
         {
+            log.Info("createMotorMatrixWithConfigFile start");
             MotorMatrix instance = new MotorMatrix();
             if (instance == null || false == instance.init(configFullFileName))
             {
                 return null;
             }
+            log.Info("createMotorMatrixWithConfigFile done.");
             return instance;
         }
 
         bool init(String fileName)
         {
+            log.Info("MotorMatrix--> init config start.");
             {
                 // read config file      
                 if (!File.Exists(fileName))
@@ -79,11 +82,11 @@ namespace parachute
                     }
                 }
             }
-
+            log.Info("MotorMatrix--> read init config file done.");
             {
                 // search from drivers and match to canGateMap
                 matchDriverGatesToMatrixGateInfos();
-                
+                log.Info("MotorMatrix--> init --> matchDriverGatesToMatrixGateInfos done.");
                 return true;
             }
         }
@@ -91,24 +94,30 @@ namespace parachute
         void matchDriverGatesToMatrixGateInfos()
         {
             List<CanGate> gList = CanGate.getGateList(CanGate.UIDEV_RS232CAN);
-
+            if (gList.Count < 1)
+            {
+                log.Error("!!! Can Not Find CAN Gates !!!");
+                return;
+            }
             foreach (CanGate canGate in gList)
             {
-                foreach (DictionaryEntry en in canGateInfoMap)
+                log.Info("--> Find Can Gate: " + canGate.info.canName + "startNodeAddr:" + canGate.info.startNodeAddr);
+                foreach (DictionaryEntry en in canGateInfoMap)//配置文件中的信息
                 {
                     CanGate.CanGateInfo info = (CanGate.CanGateInfo)en.Value;
                     if (info.startNodeAddr == canGate.info.startNodeAddr)
                     {
+                        log.Info("<-- startNode Addr Matched at Can Gate: " + canGate.info.canName + "startNodeAddr:" + canGate.info.startNodeAddr);
                         canGate.info.canName = info.canName;
                         canGate.info.canType = info.canType;
                         canGate.info.expectNodeNum = info.expectNodeNum;
                         info.gateType = canGate.info.gateType;
                         info.canIndex = canGate.info.canIndex;
-                        canGateMap.Add(canGate.info.canName, canGate);
+                        canGateMap.Add(canGate.info.canName, canGate);//add to the actual Matrix Map
                     }
                 }
             }
-
+            log.Info("==============match canGate done ==============");
             foreach (DictionaryEntry rowT in matrix)
             {
                 Hashtable rowTable = (Hashtable)rowT.Value;
@@ -118,7 +127,7 @@ namespace parachute
                     foreach (DictionaryEntry en in canGateMap)
                     {
                         CanGate canGate = (CanGate)en.Value;
-                        if (motor.gateName.Equals(canGate.info.canName))
+                        if (motor.gateName.Equals(canGate.info.canName))/////////!!!canGate的名字也要和配置文件匹配
                         {
                             motor.gateAddr = canGate.info.canIndex;
                         }
@@ -132,13 +141,21 @@ namespace parachute
                         {
                             /// node 存在 且 网关存在
                             motor.foundInDriver = true;
+                            log.Debug("found motor, gateAddr: " + motor.gateAddr +
+                                        ", canGate.info.canIndex: " + canGate.info.canIndex +
+                                        ", gateName: " + motor.gateName + ", canGate.info.canName: " +
+                                        canGate.info.canName);
                         }
                         else
                         {
-                            //Console.WriteLine("notfound motor, gateAddr: "+motor.gateAddr+
-                            //    ", canGate.info.canIndex: "+canGate.info.canIndex+
-                            //    ", gateName: "+motor.gateName+", canGate.info.canName: "+
-                            //    canGate.info.canName);
+                            Console.WriteLine("notfound motor, gateAddr: " + motor.gateAddr +
+                                ", canGate.info.canIndex: " + canGate.info.canIndex +
+                                ", gateName: " + motor.gateName + ", canGate.info.canName: " +
+                                canGate.info.canName);
+                            log.Warn("notfound motor, gateAddr: " + motor.gateAddr +
+                                ", canGate.info.canIndex: " + canGate.info.canIndex +
+                                ", gateName: " + motor.gateName + ", canGate.info.canName: " +
+                                canGate.info.canName);
                         }
                     }
                 }
