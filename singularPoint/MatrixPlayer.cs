@@ -43,6 +43,10 @@ namespace parachute
         
         public static int[] getMotorRowAndColumnNumber(int motor_num)
         {
+            if (motor_num < 10)
+            {
+                motor_num += 10;//第一行10个不能用顺延到后面，可能会造成重复，但是至少还是比不处理好。
+            }
             int[] row_and_col = {-1, -1};
             int [] motors_per_row = {10, 10, 20, 40, 40, 40, 40, 40, 20, 10, 10};//11 row in total
             int[] motor_start_num_per_row = {0, 10, 20, 40, 80, 120, 160, 200, 240, 260, 270, 280, 290}; // 290 motors in total.
@@ -456,7 +460,7 @@ namespace parachute
             var list = selectMotorNumbers(selectMotorNum, 290);//最顶上10个电机和固定结构发生干涉不能接电运动。
             foreach(var num in list){
                 int r, c;
-                int[] res = getMotorRowAndColumnNumber(num+1);
+                int[] res = getMotorRowAndColumnNumber(num);
                 r = res[0];
                 c = res[1];
                 log.Info("!!! num: " + num + " select: row: " + r + "col: " + c);
