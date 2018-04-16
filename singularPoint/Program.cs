@@ -98,7 +98,7 @@ namespace stepperMatrix
             }
 
         }
-
+        
         static void ShutdownMachine()
         {
             Console.WriteLine("shutdown");

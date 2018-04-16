@@ -152,8 +152,8 @@ namespace parachute
             ///////////////////////////////////////
         }
 
-        static bool isPlaying = false;
-        static bool stopLoop = false;
+        public static bool isPlaying = false;
+        public static bool stopLoop = false;
         static Semaphore sem = new Semaphore(0,1);
         static Queue<PlayTask> playTasks = new Queue<PlayTask>();
         static Mutex mtx = new Mutex();

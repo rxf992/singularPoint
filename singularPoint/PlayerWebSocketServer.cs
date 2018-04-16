@@ -36,7 +36,22 @@ namespace parachute
                 //    return;
                 }
                 MatrixPlayer.printPlayTask(pTask);
-                MatrixPlayer.addPlayTask(pTask);
+                
+                ///////////////////////////////////////////for immediate shutdown.
+                if (pTask.actionType.Equals("shutdown"))
+                {
+                    //do the shutdown job directly.
+                    if (MatrixPlayer.kShutdownDetected != null)
+                    {
+                        MatrixPlayer.stopLoop = true;
+                        //stop(m);
+                        MatrixPlayer.kShutdownDetected();
+                    }
+                }
+                else {
+                    MatrixPlayer.addPlayTask(pTask);
+                }
+                
             }catch(Exception ex){
                 Console.WriteLine("错误解析: "+ex.Message);
             }
