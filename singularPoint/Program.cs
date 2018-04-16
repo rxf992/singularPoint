@@ -37,7 +37,7 @@ namespace stepperMatrix
             needPowerOff = false;
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
-            //Thread.Sleep(5000);
+            
             string path = System.AppDomain.CurrentDomain.BaseDirectory;
             string fname = path + "\\MatrixConfig.matrix";
             //Alchemy.WebSocketServer;
@@ -51,7 +51,7 @@ namespace stepperMatrix
             {
                 MatrixPlayer.start(matrix);
                 MatrixPlayer.setDefaultMatrix(matrix);
-                
+                Program.matrix.setAccMotorsAll(500);
                 
             }
 

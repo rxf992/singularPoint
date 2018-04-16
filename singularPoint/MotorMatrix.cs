@@ -141,21 +141,21 @@ namespace parachute
                         {
                             /// node 存在 且 网关存在
                             motor.foundInDriver = true;
-                            log.Debug("found motor, gateAddr: " + motor.gateAddr +
+                            log.Info("found motor, gateAddr: " + motor.gateAddr +
                                         ", canGate.info.canIndex: " + canGate.info.canIndex +
                                         ", gateName: " + motor.gateName + ", canGate.info.canName: " +
                                         canGate.info.canName);
                         }
                         else
                         {
-                            Console.WriteLine("notfound motor, gateAddr: " + motor.gateAddr +
-                                ", canGate.info.canIndex: " + canGate.info.canIndex +
-                                ", gateName: " + motor.gateName + ", canGate.info.canName: " +
-                                canGate.info.canName);
-                            log.Warn("notfound motor, gateAddr: " + motor.gateAddr +
-                                ", canGate.info.canIndex: " + canGate.info.canIndex +
-                                ", gateName: " + motor.gateName + ", canGate.info.canName: " +
-                                canGate.info.canName);
+                            //Console.WriteLine("notfound motor, gateAddr: " + motor.gateAddr +
+                            //    ", canGate.info.canIndex: " + canGate.info.canIndex +
+                            //    ", gateName: " + motor.gateName + ", canGate.info.canName: " +
+                            //    canGate.info.canName);
+                            //log.Warn("notfound motor, gateAddr: " + motor.gateAddr +
+                            //    ", canGate.info.canIndex: " + canGate.info.canIndex +
+                            //    ", gateName: " + motor.gateName + ", canGate.info.canName: " +
+                            //    canGate.info.canName);
                         }
                     }
                 }

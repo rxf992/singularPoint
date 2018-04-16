@@ -22,7 +22,7 @@ namespace parachute
 
     class MatrixPlayer
     {
-
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         static MotorMatrix m=null;
         static public void setDefaultMatrix(MotorMatrix mm){
             if (mm == null) return;
@@ -37,6 +37,8 @@ namespace parachute
             Console.WriteLine("lastTime:　" + task.lastTime);
             Console.WriteLine("actionType:　" + task.actionType);
             Console.WriteLine("value:　" + task.value);
+
+            log.Debug("New PlayTask" + "actionType:　" + task.actionType + "row:　" + task.row + "value:　" + task.value + "lastTime:　" + task.lastTime);
         }
 
         public static void start(MotorMatrix matrix)
@@ -87,7 +89,7 @@ namespace parachute
         static int defaultPlayListIndex = 0;
         static List<PlayTask> defaultPlayList = new List<PlayTask>();
 
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -99,6 +101,7 @@ namespace parachute
             fstr = fstr.Replace(":", "-");
             string fname = path + String.Format("\\playLog-{0}.log", fstr);
             StreamWriter log = new StreamWriter(fname);
+            Thread.Sleep(5000);//wait some time to let user can kill the program before it actaully runs.
             while (false == stopLoop)
             {
                 if (playTasks.Count == 0)
@@ -291,15 +294,31 @@ namespace parachute
                 if (m == null) return;
                 if (task.row < 0 && task.col < 0)
                 {
-                    playRandomAll();
+                    playRandomAll(false);
                 }
                 else if (task.row > 0 && task.col < 0)
                 {
-                    playRandomRow(task.row);
+                    playRandomRow(task.row, false);
                 }
                 else if (task.row > 0 && task.col > 0)
                 {
-                    playRandom(task.row, task.col);
+                    playRandom(task.row, task.col, false);
+                }
+            }
+            else if (task.actionType.Equals("random-slowly"))
+            {
+                if (m == null) return;
+                if (task.row < 0 && task.col < 0)
+                {
+                    playRandomAll(true);
+                }
+                else if (task.row > 0 && task.col < 0)
+                {
+                    playRandomRow(task.row, true);
+                }
+                else if (task.row > 0 && task.col > 0)
+                {
+                    playRandom(task.row, task.col, true);
                 }
             }
             else if (task.actionType.Equals("enableSync"))
@@ -336,32 +355,56 @@ namespace parachute
             }
         }
 
-        static public void playRandomAll()
+        static public void playRandomAll(bool slow)
         {
             if (m == null) return;
             m.enableMotorsAll();
-            m.employOperationOnMotorsAll(setRandomSpeed);
+            if (slow)
+            {
+                m.employOperationOnMotorsAll(setRandomSpeedSlow);
+            }
+            else{
+                m.employOperationOnMotorsAll(setRandomSpeed);
+            }
         }
 
-        static public void playRandomRow(int row)
+        static public void playRandomRow(int row, bool slow)
         {
             if (m == null) return;
             m.enableMotorsRow(row);
-            m.employOperationOnMotorsRow(row, setRandomSpeed);
+            if (slow)
+            {
+                m.employOperationOnMotorsRow(row, setRandomSpeedSlow);
+            }
+            else {
+                m.employOperationOnMotorsRow(row, setRandomSpeed);
+            }
+            
         }
 
-        static public void playRandom(int row, int col)
+        static public void playRandom(int row, int col, bool slow)
         {
             if (m == null) return;
             m.enableMotor(row, col);
-            m.employOperationOnMotor(row, col, setRandomSpeed);
+            if (slow) {
+                m.employOperationOnMotor(row, col, setRandomSpeedSlow); 
+            } else {
+                m.employOperationOnMotor(row, col, setRandomSpeed); 
+            }
+
         }
 
         static int[] speedSequence = { 
                                          1000, 2000, 2000, 3000, 
-                                         2000, 8000, 2000, 3000,
+                                         2000, 6000, 2000, 3000,
                                          -1000,-2000,-2000, -3000, 
-                                         -1000,-8000, -3000, -3000
+                                         -1000,-6000, -3000, -3000
+                                     };
+        static int[] speedSlowSequence = { 
+                                         1000, 1500, 2000, 2500, 
+                                         3000, 1500, 3000, 1500,
+                                         -1000,-1500,-2000, -2500, 
+                                         -1000,-1500, -3000, -1500
                                      };
         static Random rd = new Random(7);
 
@@ -370,7 +413,11 @@ namespace parachute
             int index = rd.Next(0, 15);
             motor.setSpeed(speedSequence[index]);
         }
-
+        static public void setRandomSpeedSlow(StepperMotor motor)
+        {
+            int index = rd.Next(0, 15);
+            motor.setSpeed(speedSlowSequence[index]);
+        }
         static void initDefaultPlayList()
         {
             // todo
