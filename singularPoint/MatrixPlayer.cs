@@ -109,17 +109,18 @@ namespace parachute
             playTasks.Enqueue(task);
             mtx.ReleaseMutex();
             /////////////////////FIXME//////////////
-            //if (isPlaying == false) {
-            //    try
-            //    {
-            //        sem.Release();
-            //    }
-            //    catch(Exception e)
-            //    {
-            //        log.Warn("addPlayTask() sem.Release Exceptrion: " + e.Message + e.StackTrace);
-            //    }
-                
-            //}
+            if (isPlaying == false)
+            {
+                try
+                {
+                    sem.Release();
+                }
+                catch (Exception e)
+                {
+                    log.Warn("addPlayTask() sem.Release Exceptrion: " + e.Message + e.StackTrace);
+                }
+
+            }
                 
             ///////////////////////////////////////
         }
