@@ -477,13 +477,13 @@ namespace parachute
             m.disableSignalStop();
         }
 
-        const int defaultWaitTime = 500;
+        const int defaultCheckIntervalTimeInMs = 500;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="speedValue"></param>
         /// <param name="time"> in micro seconds </param>
-        public void waitDesiredSpeedAll(int speedValue, int time = defaultWaitTime)
+        public void waitDesiredSpeedAll(int speedValue, int time = defaultCheckIntervalTimeInMs)
         {
             foreach (int k in matrix.Keys)
             {
@@ -497,13 +497,13 @@ namespace parachute
         /// <param name="row"></param>
         /// <param name="speedValue"></param>
         /// <param name="time">in micro seconds</param>
-        public void waitDesiredSpeedRow(int row, int speedValue, int time = defaultWaitTime)
+        public void waitDesiredSpeedRow(int row, int speedValue, int time = defaultCheckIntervalTimeInMs)
         {
             Hashtable rowTable = (Hashtable)matrix[row];
             if (rowTable == null) return;
             foreach (DictionaryEntry en in rowTable)
             {
-                ((StepperMotor)en.Value).waitToDesiredSpeed(speedValue, defaultWaitTime);
+                ((StepperMotor)en.Value).waitToDesiredSpeed(speedValue, defaultCheckIntervalTimeInMs);
             }
         }
 
@@ -514,11 +514,11 @@ namespace parachute
         /// <param name="col"></param>
         /// <param name="speedValue"></param>
         /// <param name="time">micro seconds</param>
-        public void waitDesiredSpeed(int row, int col, int speedValue, int time = defaultWaitTime)
+        public void waitDesiredSpeed(int row, int col, int speedValue, int time = defaultCheckIntervalTimeInMs)
         {
             StepperMotor m = getStepperMotro(row, col);
             if(m == null) return;
-            m.waitToDesiredSpeed(speedValue, defaultWaitTime);
+            m.waitToDesiredSpeed(speedValue, defaultCheckIntervalTimeInMs);
         }
 
         public void printMatrix(string fname)

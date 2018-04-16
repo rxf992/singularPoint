@@ -40,12 +40,12 @@ namespace parachute
 
             log.Debug("New PlayTask" + "actionType:　" + task.actionType + "row:　" + task.row + "value:　" + task.value + "lastTime:　" + task.lastTime);
         }
-        public static void getMotorRowAndColumnNumber(int motor_num, out int row, out int col)
+        public static int[] getMotorRowAndColumnNumber(int motor_num)
         {
-            row = -1;
-            col = -1;
+            int[] row_and_col = {-1, -1};
             //this part of code is only for sigularity.
             // layer 1-3 
+            return row_and_col;
 
         }
         public static List<int> selectMotorNumbers(int selectNum, int totalNum)
@@ -73,7 +73,7 @@ namespace parachute
             Thread thread = new Thread(new ParameterizedThreadStart(MatrixPlayer.playRound));
             thread.Start(null);
             Thread.Sleep(3000);
-#if false
+#if true
             PlayTask task = new PlayTask();
             task.actionType = "startPlayDefaultList";
             task.col = -1;
@@ -94,10 +94,7 @@ namespace parachute
 
             try
             {
-                ////////////////FIXME ///////////////
-                // this will always cause exception. some where alway relaese the sem.
                 sem.Release();
-                
             }
             catch (Exception e)
             {
@@ -148,7 +145,7 @@ namespace parachute
             fstr = fstr.Replace(":", "-");
             string fname = path + String.Format("\\playLog-{0}.log", fstr);
             StreamWriter log = new StreamWriter(fname);
-            Thread.Sleep(5000);//wait some time to let user can kill the program before it actaully runs.
+
             while (false == stopLoop)
             {
                 if (playTasks.Count == 0)
@@ -253,7 +250,7 @@ namespace parachute
             }
             else if(task.actionType.Equals("startPlayDefaultList"))
             {
-                playDefaultList = true;
+                playDefaultList = false;///////////////////////////////////////////////////////////////////////////////////////////////////////!!!!!!!!!!!!!!!need to recover.
                 initDefaultPlayList();
                 if (defaultPlayList.Count > 0)
                 {
@@ -369,6 +366,13 @@ namespace parachute
                     playRandom(task.row, task.col, true);
                 }
             }
+            else if (task.actionType.Equals("randomSelect"))
+            {
+                if (m == null) return;
+
+                playRandomSelectFromAll(task.value, true);
+
+            }
             else if (task.actionType.Equals("enableSync"))
             {
                 if (m == null) return;
@@ -420,7 +424,20 @@ namespace parachute
         static public void playRandomSelectFromAll(int selectMotorNum, bool slowSpeed)
         { 
             //随机挑选N个电机，以某个随机的速度运行 
+            log.Info("random select :" + selectMotorNum + "to run");
             if (m == null) return;
+            if (selectMotorNum <= 0) return;
+            log.Info("random select start.");
+            var list = selectMotorNumbers(selectMotorNum, 290);//最顶上10个电机和固定结构发生干涉不能接电运动。
+            foreach(var num in list){
+                int r, c;
+                int[] res = getMotorRowAndColumnNumber(num);
+                r = res[0];
+                c = res[1];
+                log.Info("select: row: " + r + "col: " + c);
+                playRandom(r, c, true);
+            }
+
             
 
         }

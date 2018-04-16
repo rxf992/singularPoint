@@ -51,8 +51,11 @@ namespace parachute
 
         public void disable()
         {
-            if (enabled == false)
+            //if (enabled == false)
+            //    return;
+            if (foundInDriver == false)
                 return;
+
             BASIC_ACK_OBJ objBasicAck = new BASIC_ACK_OBJ();
             if (-1 == UIM512Driver.UimOFF(gateAddr, nodeAddr, true, ref objBasicAck))
             {
@@ -72,10 +75,12 @@ namespace parachute
 
         public bool setSpeed(int speedValue)
         {
-            if (enabled == false)
-            {
+            //if (enabled == false)
+            //{
+            //    return false;
+            //}
+            if (foundInDriver == false)
                 return false;
-            }
             int nRtnValue = -1;
             if (-1 == UIM512Driver.SetSPD(gateAddr, nodeAddr, speedValue, false, ref nRtnValue))
             {
@@ -87,10 +92,13 @@ namespace parachute
 
         public void setAcc(int acc)
         {
-            if (enabled == false)
-            {
+            //if (enabled == false)
+            //{
+            //    return;
+            //}
+            if (foundInDriver == false)
                 return;
-            }
+
             int nRtnValue = -1;
             if(-1 == UIM512Driver.SetmACC(gateAddr, nodeAddr, acc, true, ref nRtnValue))
             {
@@ -102,8 +110,11 @@ namespace parachute
         const int WAIT_TIME_OUT_SECOND = 20;
         public void waitToDesiredSpeed(int desiredSpeed, int waitIntervals)
         {
-            if (enabled == false)
+            //if (enabled == false)
+            //    return;
+            if (!this.foundInDriver)
                 return;
+
             uint counter = 0;
             while (true)
             {
@@ -117,6 +128,7 @@ namespace parachute
                 if ((uint)(((++counter) * waitIntervals) / 1000) > WAIT_TIME_OUT_SECOND)
                 {
                     //write timeout log
+                    log.Warn("waitToDesiredSpeed timeout gate: " + this.gateName + " nodeAddr:" + this.nodeAddr);
                     break;
                 }
                 Thread.Sleep(waitIntervals);
@@ -125,7 +137,9 @@ namespace parachute
 
         public bool isInSpeed(int speedValue)
         {
-            if (enabled == false)
+            //if (enabled == false)
+            //    return false;
+            if (foundInDriver == false)
                 return false;
             //if (currentSpeedValue == -1)
             //{
@@ -141,10 +155,12 @@ namespace parachute
 
         public int getCurrentSpeed()
         {
-            if (enabled == false)
-            {
+            //if (enabled == false)
+            //{
+            //    return (-1);
+            //}
+            if (foundInDriver == false)
                 return (-1);
-            }
 
             int returnedSpeed = -1;
             if (1 == UIM512Driver.GetSPD(gateAddr, nodeAddr, ref returnedSpeed))
@@ -156,10 +172,12 @@ namespace parachute
 
         public int getCurrentAcc()
         {
-            if (enabled == false)
-            {
+            //if (enabled == false)
+            //{
+            //    return (-1);
+            //}
+            if (foundInDriver == false)
                 return (-1);
-            }
 
             int returnAcc = -1;
             if (1 == UIM512Driver.GetmACC(gateAddr, nodeAddr, ref returnAcc))
@@ -172,12 +190,14 @@ namespace parachute
         bool signalStopEnabled;
         public void enableSignalStop()
         {
-            if (enabled == false)
-            {
+            if (foundInDriver == false)
                 return;
-            }
-            if (signalStopEnabled == true)
-                return;
+            //if (enabled == false)
+            //{
+            //    return;
+            //}
+            //if (signalStopEnabled == true)
+            //    return;
             P_S12CON pS12CON_OUT = new P_S12CON();
             P_S12CON pS12CON_IN = new P_S12CON();
             pS12CON_IN.uiS1FACT = 0x0;
@@ -193,12 +213,14 @@ namespace parachute
 
         public void disableSignalStop()
         {
-            if (enabled == false)
-            {
+            //if (enabled == false)
+            //{
+            //    return;
+            //}
+            if (foundInDriver == false)
                 return;
-            }
-            if (signalStopEnabled == false)
-                return;
+            //if (signalStopEnabled == false)
+            //    return;
             P_S12CON pS12CON_OUT = new P_S12CON();
             P_S12CON pS12CON_IN = new P_S12CON();
             pS12CON_IN.uiS1FACT = 0x0;
