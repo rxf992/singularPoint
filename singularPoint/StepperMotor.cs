@@ -103,10 +103,13 @@ namespace parachute
                 return;
             uint counter = 0;
             while (true)
-            {                
+            {
                 if (isInSpeed(desiredSpeed))
                 {
                     break;
+                }
+                else {
+                    setSpeed(desiredSpeed);
                 }
                 if ((uint)(((++counter) * waitIntervals) / 1000) > WAIT_TIME_OUT_SECOND)
                 {

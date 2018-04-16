@@ -67,7 +67,18 @@ namespace parachute
                 matrix.disableMotorsAll();
             }
             stopLoop = true;
-            sem.Release();
+
+            try
+            {
+                ////////////////FIXME ///////////////
+                // this will always cause exception. some where alway relaese the sem.
+                sem.Release();
+                
+            }
+            catch (Exception e)
+            {
+                log.Warn("stop() sem.Release Exceptrion: " + e.Message + e.StackTrace);
+            }
         }
 
         static public void addPlayTask(PlayTask task)
@@ -76,8 +87,20 @@ namespace parachute
             mtx.WaitOne();
             playTasks.Enqueue(task);
             mtx.ReleaseMutex();
-            if (isPlaying == false)
-                sem.Release();
+            /////////////////////FIXME//////////////
+            //if (isPlaying == false) {
+            //    try
+            //    {
+            //        sem.Release();
+            //    }
+            //    catch(Exception e)
+            //    {
+            //        log.Warn("addPlayTask() sem.Release Exceptrion: " + e.Message + e.StackTrace);
+            //    }
+                
+            //}
+                
+            ///////////////////////////////////////
         }
 
         static bool isPlaying = false;
@@ -134,6 +157,7 @@ namespace parachute
                 isPlaying = false;
             }
             Console.WriteLine("player stoped.");
+            //log.Inf
         }
 
         public delegate void ShutDownDetected();
@@ -363,11 +387,19 @@ namespace parachute
             {
                 m.employOperationOnMotorsAll(setRandomSpeedSlow);
             }
-            else{
+            else
+            {
                 m.employOperationOnMotorsAll(setRandomSpeed);
             }
         }
 
+        static public void playRandomSelectFromAll(int selectMotorNum, bool slowSpeed)
+        { 
+            //随机挑选N个电机，以某个随机的速度运行 
+            if (m == null) return;
+            
+
+        }
         static public void playRandomRow(int row, bool slow)
         {
             if (m == null) return;

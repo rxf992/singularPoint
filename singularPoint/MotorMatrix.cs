@@ -416,7 +416,7 @@ namespace parachute
             if (rowTable == null) return;
             foreach (DictionaryEntry en in rowTable)
             {
-                ((StepperMotor)en.Value).setSpeed(accValue);
+                ((StepperMotor)en.Value).setAcc(accValue);
             }
         }
 

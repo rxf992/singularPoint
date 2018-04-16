@@ -1,5 +1,2 @@
-{"row":-1,"col":-1,"lastTime":0,"actionType":"disableSync","value":0}
 {"row":-1,"col":-1,"lastTime":0,"actionType":"enable","value":0}
-{"row":-1,"col":-1,"lastTime":0,"actionType":"wait","value":2000}
-{"row":-1,"col":-1,"lastTime":0,"actionType":"setSpeed","value":2000}
-{"row":-1,"col":-1,"lastTime":0,"actionType":"wait","value":10000}
+{"row":-1,"col":-1,"lastTime":0,"actionType":"wait","value":1000}
