@@ -250,7 +250,7 @@ namespace parachute
             }
             else if(task.actionType.Equals("startPlayDefaultList"))
             {
-                playDefaultList = false;///////////////////////////////////////////////////////////////////////////////////////////////////////!!!!!!!!!!!!!!!need to recover.
+                playDefaultList = true;///////////////////////////////////////////////////////////////////////////////////////////////////////!!!!!!!!!!!!!!!need to recover.
                 initDefaultPlayList();
                 if (defaultPlayList.Count > 0)
                 {
