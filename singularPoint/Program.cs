@@ -49,10 +49,12 @@ namespace stepperMatrix
             
             if (matrix != null)
             {
-                MatrixPlayer.start(matrix);
-                MatrixPlayer.setDefaultMatrix(matrix);
+                Program.matrix.disableMotorsAll();
+                Program.matrix.waitDesiredSpeedAll(0);
                 Program.matrix.setAccMotorsAll(500);
-                
+
+                MatrixPlayer.start(matrix);//enable all motors.
+                MatrixPlayer.setDefaultMatrix(matrix);
             }
 
             //string localIP = GetInternalIP();
@@ -85,23 +87,10 @@ namespace stepperMatrix
             if(needPowerOff)
             {
                 log.Debug("do shut down");
-                //Process myProcess = new Process();
-                //myProcess.StartInfo.FileName = "cmd.exe";
-                //myProcess.StartInfo.UseShellExecute = false;
-                //myProcess.StartInfo.RedirectStandardInput = true;
-                //myProcess.StartInfo.RedirectStandardOutput = true;
-                //myProcess.StartInfo.RedirectStandardError = true;
-                //myProcess.StartInfo.CreateNoWindow = true;
-                //myProcess.Start();
-                ////myProcess.StandardInput.WriteLine("shutdown -s -f -t 5");
-                //myProcess.StandardInput.WriteLine("shutdown -p -f");
-                //myProcess.Close();
-                Process.Start("shutdown", "/p");    // starts the shutdown application 
-                // the argument /s is to shut down the computer
-                // the argument /t 0 is to tell the process that 
-                // the specified operation needs to be completed 
-                // after 0 seconds
-                Thread.Sleep(3000);
+
+                Process.Start("shutdown", "/p"); 
+
+                Thread.Sleep(3000);//必须有这个，才能让shutdown命令来得及运行。
                 
             }
 

@@ -40,17 +40,40 @@ namespace parachute
 
             log.Debug("New PlayTask" + "actionType:　" + task.actionType + "row:　" + task.row + "value:　" + task.value + "lastTime:　" + task.lastTime);
         }
+        public static void getMotorRowAndColumnNumber(int motor_num, out int row, out int col)
+        {
+            row = -1;
+            col = -1;
+            //this part of code is only for sigularity.
+            // layer 1-3 
 
+        }
+        public static List<int> selectMotorNumbers(int selectNum, int totalNum)
+        {
+            List<int> selected = new List<int>();
+            Random rd = new Random();
+            int i;
+            for(i = 0; i < totalNum; i++)
+            {
+                if (rd.Next() % (totalNum - i) < selectNum)
+                {
+                    selected.Add(i);
+                    selectNum--;
+                }
+            }
+            return selected;
+        }
         public static void start(MotorMatrix matrix)
         {
             if (matrix != null)
             {
                 matrix.enableMotorsAll();
             }
-            
+
             Thread thread = new Thread(new ParameterizedThreadStart(MatrixPlayer.playRound));
             thread.Start(null);
             Thread.Sleep(3000);
+#if false
             PlayTask task = new PlayTask();
             task.actionType = "startPlayDefaultList";
             task.col = -1;
@@ -58,6 +81,7 @@ namespace parachute
             task.value = -1;
             task.lastTime = 10000;
             addPlayTask(task);
+#endif
         }
 
         public static void stop(MotorMatrix matrix)

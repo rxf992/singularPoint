@@ -190,6 +190,15 @@ namespace stepperMatrix
             {                
                 Program.matrix.disableMotorsAll();
                 outputLog("全矩阵电机关闭.");
+
+                //同时关闭后台矩阵播放
+                PlayTask task = new PlayTask();
+                task.actionType = "stopPlayDefaultList";
+                task.col = -1;
+                task.row = -1;
+                task.value = -1;
+                task.lastTime = 10000;
+                MatrixPlayer.addPlayTask(task);
             }
             else if (checkMatrix.Checked == false && checkRow.Checked == true)
             {

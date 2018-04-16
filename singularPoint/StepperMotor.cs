@@ -21,7 +21,7 @@ namespace parachute
         bool enabled;
         int currentSpeedValue;
         int currentAccValue;
-
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public StepperMotor()
         {
             enabled = false;
@@ -40,10 +40,12 @@ namespace parachute
             if (-1 == UIM512Driver.UimENA(gateAddr, nodeAddr, true, ref objBasicAck))
             {
                 enabled = false;
+                log.Error("enable motor failed: gate- " + gateName + " " + gateAddr + "nodeAddr: " + nodeAddr);
             }
             else
             {
                 enabled = true;
+                //log.Debug("enable motor failed: gate- " + gateName + " " + gateAddr + "nodeAddr: " + nodeAddr);
             }
         }
 
@@ -55,6 +57,7 @@ namespace parachute
             if (-1 == UIM512Driver.UimOFF(gateAddr, nodeAddr, true, ref objBasicAck))
             {
                 enabled = true;
+                log.Error("disable motor failed: gate- " + gateName + " " + gateAddr + "nodeAddr: " + nodeAddr);
             }
             else
             {
