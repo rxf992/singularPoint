@@ -89,13 +89,14 @@ namespace stepperMatrix
             log.Debug("!!! needPowerOff=" + needPowerOff);
             if(needPowerOff)
             {
-                log.Debug("do shut down");
+                log.Debug("!!! do shut down");
 
                 Process.Start("shutdown", "/p"); 
 
                 Thread.Sleep(3000);//必须有这个，才能让shutdown命令来得及运行。
                 
             }
+            
 
         }
         

@@ -11,6 +11,7 @@ namespace parachute
 {
     class PlayerWebSocketServer
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public static void OnClose(UserContext aContext)
         {
             Console.WriteLine("Websocket closed.");
@@ -40,6 +41,7 @@ namespace parachute
                 ///////////////////////////////////////////for immediate shutdown.
                 if (pTask.actionType.Equals("shutdown"))
                 {
+                    log.Debug("!!! shutdown cmd received. do it immediately.");
                     //do the shutdown job directly.
                     if (MatrixPlayer.kShutdownDetected != null)
                     {
