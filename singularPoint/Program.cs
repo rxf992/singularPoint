@@ -50,14 +50,9 @@ namespace stepperMatrix
             
             if (matrix != null)
             {
-                Program.matrix.disableMotorsAll();
-                Program.matrix.disableSignalStopAll();
-                Program.matrix.disableSignalStopAll();
-                Program.matrix.waitDesiredSpeedAll(0);
-                Program.matrix.setAccMotorsAll(500);
-
                 MatrixPlayer.start(matrix);//enable all motors.
                 MatrixPlayer.setDefaultMatrix(matrix);
+
             }
 
             //string localIP = GetInternalIP();

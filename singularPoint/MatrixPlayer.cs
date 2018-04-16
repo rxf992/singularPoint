@@ -94,6 +94,11 @@ namespace parachute
         {
             if (matrix != null)
             {
+                matrix.disableMotorsAll();
+                matrix.disableSignalStopAll();
+                matrix.setAccMotorsAll(100);
+                matrix.disableSignalStopAll();
+                matrix.setAccMotorsAll(100);
                 matrix.enableMotorsAll();
             }
 
@@ -514,9 +519,9 @@ namespace parachute
 
         static int[] speedSequence = { 
                                          1000, 2000, 2000, 3000, 
-                                         2000, 6000, 2000, 3000,
+                                         2000, 4000, 2000, 3000,
                                          -1000,-2000,-2000, -3000, 
-                                         -1000,-6000, -3000, -3000
+                                         -1000,-4000, -3000, -3000
                                      };
         static int[] speedSlowSequence = { 
                                          1000, 1500, 2000, 2500, 
