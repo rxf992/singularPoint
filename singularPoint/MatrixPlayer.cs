@@ -40,11 +40,34 @@ namespace parachute
 
             log.Debug("New PlayTask" + "actionType:　" + task.actionType + "row:　" + task.row + "value:　" + task.value + "lastTime:　" + task.lastTime);
         }
+        
         public static int[] getMotorRowAndColumnNumber(int motor_num)
         {
             int[] row_and_col = {-1, -1};
+            int [] motors_per_row = {10, 10, 20, 40, 40, 40, 40, 40, 20, 10, 10};//11 row in total
+            int[] motor_start_num_per_row = {0, 10, 20, 40, 80, 120, 160, 200, 240, 260, 270, 280, 290}; // 290 motors in total.
             //this part of code is only for sigularity.
             // layer 1-3 
+            // find which row.
+            int row = 0;
+            for (int r = 0; r < 13; r++ )
+            {
+                if (motor_start_num_per_row[r] > motor_num)//找到起始位比motor num 大的行
+                {
+                    row = r - 1 ;
+                    break;
+                }
+            }
+            // find column.
+            int sum = 0;
+            for (int i = 0; i < row; i++)
+            {
+                sum += motors_per_row[i];
+            }
+
+            int col = motor_num - sum;
+            row_and_col[0] = row+1;
+            row_and_col[1] = col+1;
             return row_and_col;
 
         }
@@ -423,7 +446,8 @@ namespace parachute
         }
 
         static public void playRandomSelectFromAll(int selectMotorNum, bool slowSpeed)
-        { 
+        {
+#if true
             //随机挑选N个电机，以某个随机的速度运行 
             log.Info("random select :" + selectMotorNum + "to run");
             if (m == null) return;
@@ -432,14 +456,30 @@ namespace parachute
             var list = selectMotorNumbers(selectMotorNum, 290);//最顶上10个电机和固定结构发生干涉不能接电运动。
             foreach(var num in list){
                 int r, c;
-                int[] res = getMotorRowAndColumnNumber(num);
+                int[] res = getMotorRowAndColumnNumber(num+1);
                 r = res[0];
                 c = res[1];
-                log.Info("select: row: " + r + "col: " + c);
+                log.Info("!!! num: " + num + " select: row: " + r + "col: " + c);
                 playRandom(r, c, true);
             }
+#else
+            // test getMotorRowAndColumnNumber
+            List<int> list = new List<int>();
+            for (int i = 0; i < 290; i++)
+            {
+                list.Add(i);
+            }
+                foreach (var num in list)
+                {
+                    int r, c;
+                    int[] res = getMotorRowAndColumnNumber(num);
+                    r = res[0];
+                    c = res[1];
+                    log.Info("!!! num: " + num + " select: row: " + r + "col: " + c);
+                    //playRandom(r, c, true);
+                }
+#endif
 
-            
 
         }
         static public void playRandomRow(int row, bool slow)

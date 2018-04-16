@@ -41,8 +41,9 @@ namespace stepperMatrix
             string path = System.AppDomain.CurrentDomain.BaseDirectory;
             string fname = path + "\\MatrixConfig.matrix";
             //Alchemy.WebSocketServer;
-            
-                      
+
+            //MatrixPlayer.playRandomSelectFromAll(20,true);
+           
             matrix = MotorMatrix.createMotorMatrixWithConfigFile(fname);            
             MatrixPlayer.kShutdownDetected = ShutdownMachine;
 
