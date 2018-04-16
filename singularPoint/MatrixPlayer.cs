@@ -378,7 +378,7 @@ namespace parachute
                     playRandom(task.row, task.col, false);
                 }
             }
-            else if (task.actionType.Equals("random-slowly"))
+            else if (task.actionType.Equals("randomSlow"))
             {
                 if (m == null) return;
                 if (task.row < 0 && task.col < 0)
